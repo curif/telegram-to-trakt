@@ -62,7 +62,7 @@ for msg in client.iter_messages(username, limit=500):
 
   if anio > 2018 \
      and itsGoodQual \
-     and len(intersection(generos, [ 'Thriller', 'Horror', 'Mystery', 'Action', 'Adventure', 'Crime' ])) > 0 \
+     and len(intersection(generos, [ 'Thriller', 'Horror', 'Mystery', 'Action', 'Adventure', 'Crime', 'Science Fiction' ])) > 0 \
      and len(intersection(generos, [ 'Animation', 'Sports', 'Documentary', 'Biography' ])) == 0: 
       print("DOWNLOAD IT!!!!")
       toDownload[nombre] = anio
