@@ -87,14 +87,14 @@ class Application(object):
         # ('imdb', 'tt1815862'): <Movie 'After Earth' (2013)>
         watched = {}
         Trakt['sync/watched'].movies(watched, exceptions=True)
-        pp.pprint(watched)
+        #pp.pprint(watched)
 
         imdb_in_watched = [
                 imdb_key[1]
                 for imdb_key in watched.keys()
                 if imdb_key[0] == "imdb"
                 ]
-        pp.pprint(imdb_in_watched)        
+        #pp.pprint(imdb_in_watched)        
 
         print("Retrieve movies in list [{}]".format(config["trakt"]["list"]))
         trakt_in_list = Trakt['users/*/lists/*'].items(
@@ -111,7 +111,7 @@ class Application(object):
                 for movie in trakt_in_list 
                 if movie.pk[0] == "imdb"
                 ]
-        pp.pprint(imdb_in_list)
+        #pp.pprint(imdb_in_list)
 
         # Create the client and connect
         print("connect to telegram API")
@@ -305,7 +305,8 @@ if __name__ == '__main__':
         raise Exception("Error config.json not found")
     with open("config/config.json", 'r') as file:
         config  = json.load(file)
-        print(config)
+        #print(config)
+
     
     Trakt.base_url = config["trakt"]["base_url"]
 
@@ -322,11 +323,11 @@ if __name__ == '__main__':
         if not os.path.exists("config/authtoken.json"):
             print('Auth failed!')
             sys.exit(-1)
-    execute()
-
+    
+    #execute()
+    print("Waiting...")
     schedule.every(config["schedule_hours"]).hours.do(execute)
     while True:
         schedule.run_pending()
         #print("waiting...")
-        time.sleep(60)   
-
+        time.sleep(60)  
