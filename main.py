@@ -83,33 +83,35 @@ class Application(object):
         #STrakt.configuration.oauth.from_response(self.authorization)   
         Trakt.configuration.defaults.oauth.from_response(self.authorization)
         
-        print("Retrieven watched from trakt")
+        print("Retrieve watched from trakt")
         # ('imdb', 'tt1815862'): <Movie 'After Earth' (2013)>
         watched = {}
         Trakt['sync/watched'].movies(watched, exceptions=True)
-        #pp.pprint(watched)
-        imdbInWatched = [ movie[1] 
-                        if "imdb" == movie[0] else "no" 
-                        for movie in watched 
-                    ]
+        pp.pprint(watched)
+
+        imdb_in_watched = [
+                imdb_key[1]
+                for imdb_key in watched.keys()
+                if imdb_key[0] == "imdb"
+                ]
+        pp.pprint(imdb_in_watched)        
 
         print("Retrieve movies in list [{}]".format(config["trakt"]["list"]))
-        traktInList = Trakt['users/*/lists/*'].items(
+        trakt_in_list = Trakt['users/*/lists/*'].items(
                             config["trakt"]["user"],
                             config["trakt"]["list"],
                             media="movies",
                             exceptions=True
                             )
-        #pp.pprint(traktInList)
-        if not traktInList:
+        #pp.pprint(trakt_in_list)
+        if not trakt_in_list:
             raise(Exception("can't retrieve list movies"))
-
-        imdbInList = [ 
+        imdb_in_list = [ 
                 movie.pk[1] 
-                if "imdb" == movie.pk[0] else "no" 
-                for movie in traktInList 
+                for movie in trakt_in_list 
+                if movie.pk[0] == "imdb"
                 ]
-        #pp.pprint(imdbInList)
+        pp.pprint(imdb_in_list)
 
         # Create the client and connect
         print("connect to telegram API")
@@ -125,14 +127,14 @@ class Application(object):
           #print("===============================================================")
           txt = msg.message.split('\n')
           
-          #nombre y anio
-          nombre = html.unescape(txt[0])
+          #name y year
+          name = html.unescape(txt[0])
           
-          anio = nombre.rsplit(' ', 1)[1]
-          anio = 0 if anio == "N/A" or not anio else int(anio)
+          year = name.rsplit(' ', 1)[1]
+          year = 0 if year == "N/A" or not year else int(year)
 
-          nombre = nombre.rsplit(' ', 1)[0]
-          #print(nombre, anio)
+          name = name.rsplit(' ', 1)[0]
+          #print(name, year)
           
           #genero
           #Animation', 'Action', 'Adventure'
@@ -154,30 +156,30 @@ class Application(object):
               people = int(rat[1])
           #print('rating de la IMDB: ', rat, 'its good:', itsGoodQual )
 
-          imdbId = None
+          imdb_key = None
           m = re.search(r"https://www.imdb.com/title/(.+)/", txt[3])
           if m:
-              imdbId = m.group(1)
+              imdb_key = m.group(1)
           
-          if not imdbId:
-              print("[{}] don't have and imdb key".format(nombre))
+          if not imdb_key:
+              print("[{}] don't have and imdb key".format(name))
               continue
           
-          if imdbId not in imdbInList and imdbId not in imdbInWatched:
-             collected[imdbId] = {
-                     "imdb": imdbId,
-                     "name": nombre,
-                     "year": anio,
+          if imdb_key not in imdb_in_list and imdb_key not in imdb_in_watched:
+             collected[imdb_key] = {
+                     "imdb": imdb_key,
+                     "name": name,
+                     "year": year,
                      "to_download": False,
                      "calification": evaluation,
                      "people": people,
                      "genres": genres
                   }
-          print("Discovered: {} ({}) [imdb: {}] {}/{} - {}".format(nombre, anio, imdbId, evaluation, people, genres))        
+          print("Discovered: {} ({}) [imdb: {}] {}/{} - {}".format(name, year, imdb_key, evaluation, people, genres))        
         
 
         print("Filter movies") 
-        for imdbId, movie in collected.items():
+        for imdb_key, movie in collected.items():
           if movie["year"] >= config["filters"]["from_year"]:
               for fil in config["filters"]["filter_list"]:
                   if movie["calification"] >= fil["imdb_range"][0] and movie["calification"] <= fil["imdb_range"][1]:
