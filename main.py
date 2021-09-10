@@ -324,7 +324,8 @@ if __name__ == '__main__':
             print('Auth failed!')
             sys.exit(-1)
     
-    #execute()
+    execute()
+    
     print("Waiting...")
     schedule.every(config["schedule_hours"]).hours.do(execute)
     while True:
