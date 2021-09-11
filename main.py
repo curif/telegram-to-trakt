@@ -116,12 +116,12 @@ class Application(object):
         # Create the client and connect
         print("connect to telegram API")
         client = TelegramClient(
-                config["telegram"]["username"], 
+                "./config/{}.session".format(config["telegram"]["username"]), 
                 config["telegram"]["api_id"], 
                 config["telegram"]["api_hash"]
                 )
-        client.start()
-        
+        client.start(phone=config["telegram"]["phone"])
+                 
         collected = {}
         for msg in client.iter_messages(config["channel_username"], limit=500):
           #print("===============================================================")
