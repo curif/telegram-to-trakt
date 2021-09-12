@@ -1,0 +1,38 @@
+{
+    "schedule_hours": 6,
+
+    "channel_username": "MoviesTorrentsReleases",
+    "filters": {
+	"from_year": 2020,
+	"filter_list": [ {
+		"imdb_range": [5.5, 5.99],
+		"imdb_people": 100,
+		"include_genres": [ "Horror", "Sci-Fi" ],
+		"exclude_genres": [ "Comedy", "Animation", "Sports", "Documentary", "Biography", "Short" ]
+	}, {
+		"imdb_range": [6, 6.99],
+		"imdb_people": 500,
+		"include_genres": [ "Thriller", "Horror", "Mystery", "Action", "Adventure", "Crime", "Sci-Fi" ],
+		"exclude_genres": [ "Animation", "Sports", "Documentary", "Short" ]
+	}, {
+		"imdb_range": [7, 100],
+		"imdb_people": 1000,
+		"include_genres": [],
+		"exclude_genres": [ "Animation", "Sports", "Documentary", "Short" ]
+    	}
+      ]
+    },
+    "trakt": {
+        "base_url": "https://api.trakt.tv",
+        "id": "your id here",
+        "secret": "your secret",
+        "list": "MyList",
+	"user": "MyTraktUser"
+    },
+   "telegram": {
+	"api_id": "id number",
+	"api_hash": "telegram hast",
+	"username": "your user name",
+        "phone": "+54115555555"
+   }
+}
