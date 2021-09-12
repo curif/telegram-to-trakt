@@ -25,17 +25,18 @@ from telethon.errors import SessionPasswordNeededError
 from telethon.tl.functions.messages import (GetHistoryRequest)
 from telethon.tl.types import (PeerChannel)
 
-logging.basicConfig(level=logging.ERROR)
+logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s', level=logging.INFO)
+
+
+config = {}
+
+pp = pprint.PrettyPrinter(indent=2)
 
 # Python program to illustrate the intersection
 # of two lists in most simple way
 def intersection(lst1, lst2):
     lst3 = [value for value in lst1 if value in lst2]
     return lst3
-
-config = {}
-
-pp = pprint.PrettyPrinter(indent=2)
 
 class Application(object):
     def __init__(self):
@@ -48,7 +49,7 @@ class Application(object):
 
     def authenticate(self):
         if not self.is_authenticating.acquire(blocking=False):
-            print('Authentication has already been started')
+            logging.info('Authentication has already been started')
             return False
 
         # Request new device code
@@ -77,13 +78,13 @@ class Application(object):
           self.authenticate()
 
         if not self.authorization:
-            print('ERROR: Authentication required')
+            logging.error('ERROR: Authentication required')
             exit(1)
      
         #STrakt.configuration.oauth.from_response(self.authorization)   
         Trakt.configuration.defaults.oauth.from_response(self.authorization)
         
-        print("Retrieve watched from trakt")
+        logging.info("Retrieve watched from trakt")
         # ('imdb', 'tt1815862'): <Movie 'After Earth' (2013)>
         watched = {}
         Trakt['sync/watched'].movies(watched, exceptions=True)
@@ -96,7 +97,7 @@ class Application(object):
                 ]
         #pp.pprint(imdb_in_watched)        
 
-        print("Retrieve movies in list [{}]".format(config["trakt"]["list"]))
+        logging.info("Retrieve movies in list [{}]".format(config["trakt"]["list"]))
         trakt_in_list = Trakt['users/*/lists/*'].items(
                             config["trakt"]["user"],
                             config["trakt"]["list"],
@@ -106,6 +107,7 @@ class Application(object):
         #pp.pprint(trakt_in_list)
         if not trakt_in_list:
             raise(Exception("can't retrieve list movies"))
+        
         imdb_in_list = [ 
                 movie.pk[1] 
                 for movie in trakt_in_list 
@@ -114,7 +116,7 @@ class Application(object):
         #pp.pprint(imdb_in_list)
 
         # Create the client and connect
-        print("connect to telegram API")
+        logging.info("Connect to telegram API")
         client = TelegramClient(
                 "./config/{}.session".format(config["telegram"]["username"]), 
                 config["telegram"]["api_id"], 
@@ -162,7 +164,7 @@ class Application(object):
               imdb_key = m.group(1)
           
           if not imdb_key:
-              print("[{}] don't have and imdb key".format(name))
+              logging.debug("[{}] don't have and imdb key".format(name))
               continue
           
           if imdb_key not in imdb_in_list and imdb_key not in imdb_in_watched:
@@ -175,17 +177,17 @@ class Application(object):
                      "people": people,
                      "genres": genres
                   }
-          print("Discovered: {} ({}) [imdb: {}] {}/{} - {}".format(name, year, imdb_key, evaluation, people, genres))        
+          logging.debug("Discovered: {} ({}) [imdb: {}] {}/{} - {}".format(name, year, imdb_key, evaluation, people, genres))        
         
 
-        print("Filter movies") 
+        logging.info("Filter {} collected movies".format(len(collected))) 
         for imdb_key, movie in collected.items():
           if movie["year"] >= config["filters"]["from_year"]:
               for fil in config["filters"]["filter_list"]:
                   if movie["calification"] >= fil["imdb_range"][0] and movie["calification"] <= fil["imdb_range"][1]:
                       if movie["people"] >= fil["imdb_people"]:
-                        if len(intersection(movie["genres"] , fil["include_genres"])) > 0 \
-                            and len(intersection(movie["genres"], fil["exclude_genres"])) == 0: 
+                        if ( len(fil["include_genres"]) == 0 or len(intersection(movie["genres"] , fil["include_genres"])) > 0 ) \
+                             and ( len(fil["exclude_genres"]) == 0 or len(intersection(movie["genres"], fil["exclude_genres"])) == 0 ): 
                               movie["to_download"] = True
                               break
         
@@ -198,19 +200,18 @@ class Application(object):
                    } for imdb, movie in collected.items() if movie["to_download"]
                 ]
         }
-        print("Add movies to list [{}]".format(config["trakt"]["list"]))
-        pp.pprint(to_add)
+        logging.info("Add movies to list [{}]".format(config["trakt"]["list"]))
+        logging.info(pprint.pformat(to_add))
         result = Trakt['users/*/lists/*'].add(
                             config["trakt"]["user"],
                             config["trakt"]["list"],
                             to_add,
                             exceptions=True
                             )
-        print("{} added to the list".format(result["added"]["movies"]))
-        print("not found:")
-        pp.pprint(result["not_found"]["movies"])
+        logging.info("{} added to the list".format(result["added"]["movies"]))
+        logging.info("not found: {}".format(pprint.pformat(result["not_found"]["movies"])))
         
-        print("Finished =====")
+        logging.info("Finished =====")
 
         #for name, d in toDownload.items():
         #     muvi = Trakt["movies"].get(d["imdb"])
@@ -326,7 +327,8 @@ if __name__ == '__main__':
     
     execute()
     
-    print("Waiting...")
+    logging.info("Waiting...")
+
     schedule.every(config["schedule_hours"]).hours.do(execute)
     while True:
         schedule.run_pending()
