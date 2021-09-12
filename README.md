@@ -1,4 +1,4 @@
-This program explore a specific Telegram channel with movie information and, if the movie cumpliment some requirements, is added to a Trakt list (only if the movie was not watched previously)
+This program explore a specific Telegram channel with movies information and, if the movie cumpliment some requirements, is added to a Trakt list (only if the movie was not watched previously)
 
 # requeriments
 
