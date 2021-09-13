@@ -1,9 +1,18 @@
-This program explore a specific Telegram channel with movies information and, if the movie cumpliment some requirements, is added to a Trakt list (only if the movie was not watched previously)
+This program explore a specific Telegram channel with movies information and, if the movie fullfill the configured requirements, is added to a Trakt list (only if the movie was not watched previously)
 
-# requeriments
+# Instalation
+
+Download the code and copy to a directory of your preference. 
+
+# Requeriments
 
 Please read the `requirements.txt` to understand the dependencies.
 
+Run de requirements install:
+
+```bash
+pip3 install -r requirements.txt
+```
 # config.json
 
 Create a json file (you can copy the `config.json.example` in the `config/` subdir).
@@ -38,7 +47,7 @@ Create a json file (you can copy the `config.json.example` in the `config/` subd
         "id": "your id here",
         "secret": "your secret",
         "list": "MyList",
-	      "user": "MyTraktUser"
+	"user": "MyTraktUser"
     },
    "telegram": {
       "api_id": "id number",
@@ -57,13 +66,18 @@ Create a json file (you can copy the `config.json.example` in the `config/` subd
         * imdb_people: minimal quantity of people who voted.
         * include_genres: the movie must to have at least one of those genres. Empty means "all"
         * exclude_genres: if the movie has at least one of those will be exluded. Empty means "all"
-* trakt: trakt connection information (see below)
+* trakt: 
+    * trakt connection information (see below)
+    * list: a trakt user list where you add the movies of intereset.
 * telegram: telegram connection information (see below)
 
 # Trakt
-In particular, the `trakt.py` library needs to connect this application to Trakt, and to give permissions to your Trakt user. For that you will need to create a new application in Trakt to obtain your `id` and `secret`.
+
+The `trakt.py` library needs to connect this application to Trakt, and to give permissions to your Trakt user. For that you will need to create a new application in Trakt to obtain your `id` and `secret`.
 
 Goto https://trakt.tv/oauth/applications/new
+
+Copy the id and secret to your config.json.
 
 # Telegram
 
@@ -71,7 +85,7 @@ The connection with telegram is managed with the `telethon` library. You must to
 
 To know how to create the application please follow the instructions in the `telethon` page: https://docs.telethon.dev/en/latest/basic/signing-in.html
 
-Telethon uses a `session` file (the program name it as `/config/<your user>.session`. To create the session file for first time you'd use the `create_session.py` program. Depending of the type of authentication you use the program will ask for a confirmation token that you will receive in your telegram client as a message.
+Telethon uses a `session` file (the program name it as `/config/<your user>.session`. To create the session file for first time you'd use the `create_session.py` program. Depending of the type of authentication you use the program may ask for a confirmation token that you will receive in your telegram client as a message.
 
 # Docker
 
@@ -100,10 +114,10 @@ session created
 ```yaml
   telegram_to_track:
     build:
-      context: ./telegram-to-trakt
+      context: ./<folder where the software was copied>
     image: telegram-to-trakt:latest
     volumes:
-     - /home/xxxx/telegram-to-trakt/config:/usr/src/app/config
+     - /home/<your user>/<folder where the software was copied>/config:/usr/src/app/config
     environment:
       TZ: America/Argentina/Buenos_Aires
     restart: unless-stopped
