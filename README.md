@@ -25,21 +25,21 @@ Create a json file (you can copy the `config.json.example` in the `config/` subd
     "filters": {
 	    "from_year": 2020,
 	    "filter_list": [ {
-            "imdb_range": [5.5, 5.99],
-            "imdb_people": 100,
-            "include_genres": [ "Horror", "Sci-Fi" ],
-            "exclude_genres": [ "Comedy", "Animation", "Sports", "Documentary", "Biography", "Short" ]
-          }, {
-            "imdb_range": [6, 6.99],
-            "imdb_people": 500,
-            "include_genres": [ "Thriller", "Horror", "Mystery", "Action", "Adventure", "Crime", "Sci-Fi" ],
-            "exclude_genres": [ "Animation", "Sports", "Documentary", "Short" ]
-          }, {
-            "imdb_range": [7, 100],
-            "imdb_people": 1000,
-            "include_genres": [],
-            "exclude_genres": [ "Animation", "Sports", "Documentary", "Short" ]
-          }
+		    "imdb_range": [5.5, 100],
+		    "imdb_people": 100,
+		    "include_genres": [ "Horror", "Sci-Fi" ],
+		    "exclude_genres": [ "Comedy", "Animation", "Sports", "Documentary", "Biography", "Short" ]
+		  }, {
+		    "imdb_range": [6, 100],
+		    "imdb_people": 500,
+		    "include_genres": [ "Thriller", "Horror", "Mystery", "Action", "Adventure", "Crime", "Sci-Fi" ],
+		    "exclude_genres": [ "Animation", "Sports", "Documentary", "Short" ]
+		  }, {
+		    "imdb_range": [7, 100],
+		    "imdb_people": 1000,
+		    "include_genres": [],
+		    "exclude_genres": [ "Animation", "Sports", "Documentary", "Short" ]
+		  }
       ]
     },
     "trakt": {
@@ -62,7 +62,7 @@ Create a json file (you can copy the `config.json.example` in the `config/` subd
 * filters: requeriments to select a movie.
     * from_year: ignore movies realased before this date.
     * filter_list: list of filters to apply (in order)
-        * imdb_range: from/to califications. If the movie has califications between this range the movie will be selected.
+        * imdb_range: from/to califications. A movie with califications between this range will be selected and added to the list.
         * imdb_people: minimal quantity of people who voted.
         * include_genres: the movie must to have at least one of those genres. Empty means "all"
         * exclude_genres: if the movie has at least one of those will be exluded. Empty means "all"
@@ -70,6 +70,14 @@ Create a json file (you can copy the `config.json.example` in the `config/` subd
     * trakt connection information (see below)
     * list: a trakt user list where you add the movies of intereset.
 * telegram: telegram connection information (see below)
+
+# Examples
+
+In the configuration example above, a Drama movie with a calification of 8/17000 (17000 votes that result in a calification of eight) will be selected. Instead, if the movie is a Sport Drama will be excluded .
+
+A Horror movie with a calification of 5.5/200 will be selected. The same but animation horror will be excluded. Usefull if you like Horror movies but not the Animation genre.
+
+This configuration catches any movie with a calification 7/1000 or above. But exclude Shorts for example.
 
 # Trakt
 
