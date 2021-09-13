@@ -210,7 +210,8 @@ class Application(object):
                             )
         logging.info("{} added to the list".format(result["added"]["movies"]))
         logging.info("not found: {}".format(pprint.pformat(result["not_found"]["movies"])))
-        
+        logging.debug("telegram disconnect.")
+        client.disconnect() 
         logging.info("Finished =====")
 
         #for name, d in toDownload.items():
