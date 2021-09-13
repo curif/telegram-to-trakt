@@ -93,7 +93,7 @@ The connection with telegram is managed with the `telethon` library. You must to
 
 To know how to create the application please follow the instructions in the `telethon` page: https://docs.telethon.dev/en/latest/basic/signing-in.html
 
-Telethon uses a `session` file (the program name it as `/config/<your user>.session`. To create the session file for first time you'd use the `create_session.py` program. Depending of the type of authentication you use the program may ask for a confirmation token that you will receive in your telegram client as a message.
+Telethon uses a `session` file (the program name it as `/config/<your user>.session`). To create the session file for first time you'd use the `create_session.py` program. Depending of the type of authentication you use the program may ask for a confirmation token that you will receive in your telegram client as a message.
 
 # Docker
 
