@@ -201,17 +201,22 @@ class Application(object):
                 ]
         }
         logging.info("Add movies to list [{}]".format(config["trakt"]["list"]))
-        logging.info(pprint.pformat(to_add))
-        result = Trakt['users/*/lists/*'].add(
-                            config["trakt"]["user"],
-                            config["trakt"]["list"],
-                            to_add,
-                            exceptions=True
-                            )
-        logging.info("{} added to the list".format(result["added"]["movies"]))
-        logging.info("not found: {}".format(pprint.pformat(result["not_found"]["movies"])))
+        if len(to_add["movies"]) > 0:
+            logging.info(pprint.pformat(to_add))
+            result = Trakt['users/*/lists/*'].add(
+                                config["trakt"]["user"],
+                                config["trakt"]["list"],
+                                to_add,
+                                exceptions=True
+                                )
+            logging.info("{} added to the list".format(result["added"]["movies"]))
+            logging.info("not found: {}".format(pprint.pformat(result["not_found"]["movies"])))
+        else:
+            logging.info("No new movies to add.")
+        
         logging.debug("telegram disconnect.")
         client.disconnect() 
+        
         logging.info("Finished =====")
 
         #for name, d in toDownload.items():
