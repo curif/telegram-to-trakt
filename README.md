@@ -25,12 +25,12 @@ Create a json file (you can copy the `config.json.example` in the `config/` subd
     "filters": {
 	    "from_year": 2020,
 	    "filter_list": [ {
-		    "imdb_range": [5.5, 100],
+		    "imdb_range": [5.5, 5.99],
 		    "imdb_people": 100,
 		    "include_genres": [ "Horror", "Sci-Fi" ],
 		    "exclude_genres": [ "Comedy", "Animation", "Sports", "Documentary", "Biography", "Short" ]
 		  }, {
-		    "imdb_range": [6, 100],
+		    "imdb_range": [6, 6.99],
 		    "imdb_people": 500,
 		    "include_genres": [ "Thriller", "Horror", "Mystery", "Action", "Adventure", "Crime", "Sci-Fi" ],
 		    "exclude_genres": [ "Animation", "Sports", "Documentary", "Short" ]
