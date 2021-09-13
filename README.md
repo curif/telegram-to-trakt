@@ -51,12 +51,12 @@ Create a json file (you can copy the `config.json.example` in the `config/` subd
 * schedule_hours: time between executions
 * channel_username: is the name of the channel to explore. Obviously if this specific channel changes o disappear the program will be useless.
 * filters: requeriments to select a movie.
-  *  from_year: ignore movies realased before this date.
-  *  filter_list: list of filters to apply (in order)
-    * imdb_range: from/to califications. If the movie has califications between this range the movie will be selected.
-    * imdb_people: minimal quantity of people who voted.
-    * include_genres: the movie must to have at least one of those genres. Empty means "all"
-    * exclude_genres: if the movie has at least one of those will be exluded. Empty means "all"
+    * from_year: ignore movies realased before this date.
+    * filter_list: list of filters to apply (in order)
+        * imdb_range: from/to califications. If the movie has califications between this range the movie will be selected.
+        * imdb_people: minimal quantity of people who voted.
+        * include_genres: the movie must to have at least one of those genres. Empty means "all"
+        * exclude_genres: if the movie has at least one of those will be exluded. Empty means "all"
 * trakt: trakt connection information (see below)
 * telegram: telegram connection information (see below)
 
