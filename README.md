@@ -81,7 +81,7 @@ This configuration catches any movie with a calification 7/1000 or above. But ex
 
 # Trakt
 
-The `trakt.py` library needs to connect this application to Trakt, and to give permissions to your Trakt user. For that you will need to create a new application in Trakt to obtain your `id` and `secret`.
+You must to give permissions to the application in order to access with your Trakt user. Go to the the applications page in Trakt and create a new application, then grant access to obtain your `id` and `secret`.
 
 Goto https://trakt.tv/oauth/applications/new
 
@@ -89,11 +89,11 @@ Copy the id and secret to your config.json.
 
 # Telegram
 
-The connection with telegram is managed with the `telethon` library. You must to create a new application and fill the data in your `config.json` file in the `config` directory.
+The connection with telegram is managed with the `telethon` library. You must to create a new application and fill the data in your `config.json` file in the `config` folder.
 
 To know how to create the application please follow the instructions in the `telethon` page: https://docs.telethon.dev/en/latest/basic/signing-in.html
 
-Telethon uses a `session` file (the program name it as `/config/<your user>.session`). To create the session file for first time you'd use the `create_session.py` program. Depending of the type of authentication you use the program may ask for a confirmation token that you will receive in your telegram client as a message.
+Telethon uses a `session` file (the program name that file as `/config/<your user>.session`). To create the session file for first time you'd use the `create_session.py` program. Depending of the type of authentication you use the program may ask for a confirmation token and you will receive it in your telegram client as a message.
 
 # Docker
 
