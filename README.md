@@ -1,4 +1,4 @@
-This program explore a specific Telegram channel with movies information and, if the movie fullfill the configured requirements, is added to a Trakt list (only if the movie was not watched previously)
+This program explore a specific Telegram channel with movies information and, if the movie fullfill the configured requirements, is added to a Trakt list (only if the movie was not watched previously).
 
 # Instalation
 
@@ -73,15 +73,15 @@ Create a json file (you can copy the `config.json.example` in the `config/` subd
 
 # Examples
 
-In the configuration example above, a Drama movie with a calification of 8/17000 (17000 votes that result in a calification of eight) will be selected. Instead, if the movie is a Sport Drama will be excluded .
+In the configuration example above, a Drama movie with a calification of 8/17000 (17000 votes that result in a calification of eight) will be selected. Instead, if the movie is a Sport Drama will be excluded.
 
-A Horror movie with a calification of 5.5/200 will be selected. The same but animation horror will be excluded. Usefull if you like Horror movies but not the Animation genre.
+An Horror movie with a calification of 5.5/200 will be selected. The same but animation horror will be excluded. It's usefull if you like Horror movies but not the Animation genre.
 
 This configuration catches any movie with a calification 7/1000 or above. But exclude Shorts for example.
 
 # Trakt
 
-You must to give permissions to the application in order to access with your Trakt user. Go to the the applications page in Trakt and create a new application, then grant access to obtain your `id` and `secret`.
+You should give permissions to the application in order to access with your Trakt user. Go to the the applications page in Trakt and create a new application, then grant access to obtain your `id` and `secret`.
 
 Goto https://trakt.tv/oauth/applications/new
 
