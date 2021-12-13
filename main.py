@@ -82,7 +82,8 @@ class Application(object):
             exit(1)
      
         #STrakt.configuration.oauth.from_response(self.authorization)   
-        Trakt.configuration.defaults.oauth.from_response(self.authorization)
+        Trakt.configuration.defaults.oauth.from_response(self.authorization,   
+                refresh=True)
         
         logging.info("Retrieve watched from trakt")
         # ('imdb', 'tt1815862'): <Movie 'After Earth' (2013)>
