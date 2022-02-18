@@ -87,34 +87,37 @@ class Application(object):
         
         logging.info("Retrieve watched from trakt")
         # ('imdb', 'tt1815862'): <Movie 'After Earth' (2013)>
-        watched = {}
-        Trakt['sync/watched'].movies(watched, exceptions=True)
-        #pp.pprint(watched)
+        def getImdbPK(movie):
+            for k in movie.keys:
+                if k[0] == 'imdb':
+                    return k[1]
+            return None
 
-        imdb_in_watched = [
-                imdb_key[1]
-                for imdb_key in watched.keys()
-                if imdb_key[0] == "imdb"
-                ]
-        #pp.pprint(imdb_in_watched)        
+        watched = Trakt['sync/watched'].movies(exceptions=True)
+        #pp.pprint(watched)
 
         logging.info("Retrieve movies in list [{}]".format(config["trakt"]["list"]))
         trakt_in_list = Trakt['users/*/lists/*'].items(
                             config["trakt"]["user"],
                             config["trakt"]["list"],
                             media="movies",
+                            pagination=True,
                             exceptions=True
                             )
         #pp.pprint(trakt_in_list)
         if not trakt_in_list:
             raise(Exception("can't retrieve list movies"))
-        
-        imdb_in_list = [ 
-                movie.pk[1] 
-                for movie in trakt_in_list 
-                if movie.pk[0] == "imdb"
-                ]
-        #pp.pprint(imdb_in_list)
+
+        watched_or_listed = [
+                getImdbPK(movie)
+                for movie in watched.values()
+                if getImdbPK(movie)
+            ]
+        watched_or_listed.extend([getImdbPK(movie)
+                                    for movie in trakt_in_list
+                                    if getImdbPK(movie) and getImdbPK(movie) not in watched_or_listed ])
+        watched_or_listed.sort()
+        logging.info("{} movies watched or in list".format(len(watched_or_listed)))
 
         # Create the client and connect
         logging.info("Connect to telegram API")
@@ -168,7 +171,7 @@ class Application(object):
               logging.debug("[{}] don't have and imdb key".format(name))
               continue
           
-          if imdb_key not in imdb_in_list and imdb_key not in imdb_in_watched:
+          if imdb_key not in watched_or_listed:
              collected[imdb_key] = {
                      "imdb": imdb_key,
                      "name": name,
