@@ -133,38 +133,49 @@ class Application(object):
           #print("===============================================================")
           if msg.message is None:
             continue
+          try:
+            txt = msg.message.split('\n')
+          
+            #name y year
+            name = html.unescape(txt[0])
+          
+            year = name.rsplit(' ', 1)[1]
+            year = 0 if year == "N/A" or not year or not year.isnumeric() else int(year)
+
+            name = name.rsplit(' ', 1)[0]
+            #print(name, year)
             
-          txt = msg.message.split('\n')
-          
-          #name y year
-          name = html.unescape(txt[0])
-          
-          year = name.rsplit(' ', 1)[1]
-          year = 0 if year == "N/A" or not year else int(year)
+            #genero
+            #Animation', 'Action', 'Adventure'
+            #['Drama', 'Horror', 'Mystery']
+            m = re.search(r"Genre: (.+)", txt[1])
+            if not m:
+              print(f"Cant determine the the Genre in {msg}")
+              continue
+            
+            genres = m.group(1).split('|')
+            #print('genero: ', genres)
 
-          name = name.rsplit(' ', 1)[0]
-          #print(name, year)
+            #imdb rating
+            m = re.search(r"IMDB Rating: (.+)", txt[2])
+            if not m:
+              print(f"Cant determine the IMDB Rating in {msg}")
+              continue
+              
+            rating = m.group(1)
+            if rating == 'N/A/N/A' or rating == 'N/A':
+                rat = [0,0]
+                evaluation = 0
+                people = 0
+            else:
+                rat = rating.split('/')
+                evaluation = float(rat[0])
+                people = int(rat[1])
+            #print('rating de la IMDB: ', rat, 'its good:', itsGoodQual )
+          except Exception as e:
+            print(f"Error {e} parsing {msg}")
+            continue
           
-          #genero
-          #Animation', 'Action', 'Adventure'
-          #['Drama', 'Horror', 'Mystery']
-          m = re.search(r"Genre: (.+)", txt[1])
-          genres = m.group(1).split('|')
-          #print('genero: ', genres)
-
-          #imdb rating
-          m = re.search(r"IMDB Rating: (.+)", txt[2])
-          rating = m.group(1)
-          if rating == 'N/A/N/A' or rating == 'N/A':
-              rat = [0,0]
-              evaluation = 0
-              people = 0
-          else:
-              rat = rating.split('/')
-              evaluation = float(rat[0])
-              people = int(rat[1])
-          #print('rating de la IMDB: ', rat, 'its good:', itsGoodQual )
-
           imdb_key = None
           m = re.search(r"https://www.imdb.com/title/(.+)/", txt[3])
           if m:
