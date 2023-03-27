@@ -131,6 +131,9 @@ class Application(object):
         collected = {}
         for msg in client.iter_messages(config["channel_username"], limit=500):
           #print("===============================================================")
+          if msg.message is None:
+            continue
+            
           txt = msg.message.split('\n')
           
           #name y year
@@ -152,7 +155,7 @@ class Application(object):
           #imdb rating
           m = re.search(r"IMDB Rating: (.+)", txt[2])
           rating = m.group(1)
-          if rating == 'N/A/N/A':
+          if rating == 'N/A/N/A' or rating == 'N/A':
               rat = [0,0]
               evaluation = 0
               people = 0
